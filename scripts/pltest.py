@@ -4,8 +4,15 @@ from easiest.helpers import mydir
 import json
 
 statedir = mydir()+"plscripts/tryangels/state/"
-
+with open("auth.igme", "r+") as f:
+    pw = json.load(f)
+auth = {
+        'Username': pl.config_data['planetlab_username'],
+        'AuthString': pw[0],
+        'AuthMethod': 'password'
+        }
 # auth = pl.create_auth()
+'''
 print "adding booted nodes"
 pl.add_booted_nodes(auth)
 #pl.drop_dead_nodes(auth)
@@ -16,6 +23,7 @@ pl.refresh_usable_nodes_list()
 
 #print "sleeping"
 #sleep(60*60*3)
+'''
 
 loc_port_map = dict()
 with open(statedir+"port_loc_mapping.json", "r+") as f:
