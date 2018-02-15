@@ -10,12 +10,16 @@ import threading
 from daemon2x import daemon
 import time
 import os
+import urllib2
 
 
 topdir = format_dirpath(mydir()+"../")
 datadir = format_dirpath(topdir+"data/")
 statedir = format_dirpath(topdir+"state/")
 packetsdir = format_dirpath(datadir+"packets/")
+
+datahost = sys.argv[3]
+dataport = sys.argv[4]
 
 cycle_time =  float(sys.argv[2])
 
@@ -27,6 +31,18 @@ loc_port_map = dict()
 with open(statedir+"port_loc_mapping.json", "r+") as f:
     loc_port_map = json.load(f)
 myports = loc_port_map.values()
+
+
+def sendstr(dst_dom, dst_port, data):
+    if ':' in dst_dom:
+        req = urllib2.Request(dst_dom+':'+dst_port, data)
+    else:
+        req = urllib2.Request('http://'+dst_dom+':'+dst_port, data)
+    try:
+        res = urllib2.urlopen(req)
+    except:
+        return True
+    return False
 
 
 def update_dump_time(duration=None):
@@ -65,6 +81,9 @@ def capture_packets():
                 with open(fname, "w+") as f:
                     json.dump(tvals, f)
                 fix_ownership(fname)
+                datadict = {'post_handler': 'save_packet_data',
+                        'data': tvals}
+                sendstr(datahost, dataport, json.dumps(datadict))
                 tvals = list()
             update_dump_time()
             print "dumped!"

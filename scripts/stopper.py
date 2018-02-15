@@ -30,13 +30,14 @@ with open(statedir+"port_loc_mapping.json", "r+") as f:
     loc_port_map = json.load(f)
 
 print "setting up nodes"
-methods = [pl.setup_python, pl.push_dir, pl.setup_sudoers, pl.execute_cmd]
+methods = [pl.execute_cmd]
 snifferblob = mydir()+"plscripts/tryangels/"
 
 startserv = "cd tryangels/scripts/"
 startserv += "; sudo \
         \"LD_LIBRARY_PATH=$LD_LIBRARY_PATH\" python2.7 \
-        sniffer.py start 60 harcos.cs.northwestern.edu 42427"
+        sniffer.py stop 60 harcos.cs.northwestern.edu 42427"
 for p in loc_port_map.values():
-    startserv += "; python2.7 server.py start"+str(p)
+    startserv += "; python2.7 server.py stop "+str(p)
+startserv += "; sudo killall python2.7; sudo rm -r ../state/daemon/*"
 pl.setup_nodes(auth, setup_methods=methods, pushdir=snifferblob, cmd=startserv, remote_overwrite=True)
