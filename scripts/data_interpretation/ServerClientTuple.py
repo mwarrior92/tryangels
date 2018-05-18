@@ -29,11 +29,7 @@ class ServerClientTuple:
             #print self.listOfPackets[i]['time']
             gaps.append(self.listOfPackets[i+1]['time'] - self.listOfPackets[i]['time'])
 
-        print len(gaps)
-        if len(gaps) > 0:
-            self.packetTimeDiff = sum(gaps) / float(len(gaps))
-        else:
-            print "packetTimeDiff calc failed"
+        self.packetTimeDiff = sum(gaps) / float(len(gaps)) if len(gaps) > 0 else 0
 
     def findNumResent(self):
         resent = {}
@@ -48,12 +44,7 @@ class ServerClientTuple:
 
         values = [resent[k] for k in resent.keys() if resent[k] > 0]
 
-        self.numResent = len(values)
-
-        #if len(values) > 0:
-        #    self.numResent = sum(values) / float(len(values))
-        #else:
-        #    print "numResent calc failed"
+        self.numResent = sum(values)/float(len(values)) if len(values) > 0 else 0
 
 
     def calculateRTT(self):
@@ -74,10 +65,7 @@ class ServerClientTuple:
                         rtts.append(self.listOfPackets[p2]['time'] - self.listOfPackets[p1]['time'])
                         break
 
-        if(len(rtts) > 0):
-            self.RTT = sum(rtts) / float(len(rtts))
-        else:
-            print "RTT calc failed"
+        self.RTT = sum(rtts) / float(len(rtts)) if len(rtts) > 0 else 0
 
 
     def addPackets(self, packets):
@@ -103,10 +91,10 @@ class ServerClientTuple:
         elif key == "ptd":
             return self.packetTimeDiff
         elif key == "nr":
-            return this.numResent
+            return self.numResent
         elif key == "s":
-            return this.server
+            return self.server
         elif key == "c":
-            return this.client
+            return self.client
         else:
             return False
