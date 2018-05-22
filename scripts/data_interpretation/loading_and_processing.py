@@ -53,6 +53,14 @@ def load_one_dir(dirname):
 
     return pairs
 
+def make_pair_rtt_dict(pairs):
+    rtt_data = {}
+    server = pairs[0].server
+    for p in pairs:
+        rtt_data[p.client] = p.RTT
+
+    return server, rtt_data
+
 def print_one_file(fname):
     with open(fname, 'r') as f:
         data = json.load(f)
@@ -66,7 +74,9 @@ def load_all(root_dir):
     data = {}
     for root, dirs, files in os.walk(root_dir):
         for d in dirs:
-            data[d] = load_one_dir(d)
+            p = load_one_dir(d)
+            s, d = make_pair_rtt_dict(p)
+            data[s] = d
         break
 
     return data

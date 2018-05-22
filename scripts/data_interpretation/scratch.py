@@ -70,15 +70,23 @@ do those groups align with location information)
 
 if __name__ == '__main__':
     from loading_and_processing import *
-
+    import pickle
     #print_one_file("packets/ip128.8.126.79/t1518636333.83.json")
 
 
-    pairs = load_one_dir("ip128.10.18.52")
-    print len(pairs)
-    for i in pairs:
+    #pairs = load_one_dir("ip128.10.18.52")
+    #s, d = make_pair_rtt_dict(pairs)
+    #print d
+    #print s
+
+    data = load_all("packets")
+
+    with open("rtt_data.p", "w") as f:
+        pickle.dump(data, f)
+    #print len(pairs)
+    #for i in pairs:
     #    continue
-        print i, "\n"
+    #    print i, "\n"
 
     #d = load_all("packets")
 
