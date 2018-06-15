@@ -1,4 +1,4 @@
-# Most of the code in this file was acquired from
+# Most of the code in this file was acquired from https://github.com/soarpenguin/python-scripts/blob/master/sniffer.py
 # It was modified for the needs of this project
 
 #Packet sniffer in python
